@@ -1,0 +1,42 @@
+version: '3'
+services:
+  myretailapp:
+    image: myretailapp
+    build: .
+    deploy:
+        replicas: 5
+    ports:
+      - 8080:8080
+    depends_on:
+      - MyRetailCassandra
+    networks:
+      - myretailnetwork
+
+  MyRetailCassandra:
+    container_name: MyRetailCassandra
+    image: cassandra:latest
+    volumes:
+      - '/Users/z00341l/DB/MY_RETAIL:/var/lib/cassandra'
+    ports:
+      - 9052:9042
+      - 32817:9160
+      - 32818:7000
+      - 32819:7001
+      - 32820:7199
+    networks:
+      - myretailnetwork
+
+  cassandra-load-keyspace:
+    container_name: cassandra-load-keyspace
+    image: cassandra:latest
+    depends_on:
+      - MyRetailCassandra
+    volumes:
+      - /Users/z00341l/DB/MY_RETAIL_SCRIPT/script.cql:/script.cql
+    command: /bin/bash -c "sleep 60 && echo loading cassandra keyspace && cqlsh cassandra -f /script.cql"
+    networks:
+      - myretailnetwork
+
+networks:
+    myretailnetwork:
+        driver: bridge
