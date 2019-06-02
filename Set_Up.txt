@@ -1,0 +1,20 @@
+----------------------------------------------------------------------------------------------------
+NOMAD SETUP :-
+----------------------------------------------------------------------------------------------------
+Download Vagrant File from
+	https://raw.githubusercontent.com/hashicorp/nomad/master/demo/vagrant/Vagrantfile
+	
+vagrant up
+vagrant ssh
+sudo nomad agent -dev
+
+nomad node status
+nomad server members
+
+Copy the my_retail.nomad here
+nomad job run my_retail.nomad
+nomad status my_retail
+nomad job stop my_retail
+
+nomad alloc logs de5f7fda
+----------------------------------------------------------------------------------------------------
