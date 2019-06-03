@@ -1,0 +1,50 @@
+pipeline:
+  clone:
+    image: plugins/git
+    recursive: true
+    depth: 10
+    tags: true
+
+  master-pr-build:
+    image: library/java:8
+    pull: true
+    when:
+      branch: master
+      event: pull_request
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xmx2400M
+    commands:
+      - ./gradlew -g .gradle clean build --continue --no-daemon -PmaxParallelForks=1
+
+  master-push-build:
+    image: library/java:8
+    pull: true
+    when:
+      branch: master
+      event: push
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xmx2400M
+    commands:
+      - ./gradlew -g .gradle clean build --continue --no-daemon -PmaxParallelForks=1
+
+  release-tag:
+    image: library/java:8
+    environment:
+      - GRADLE_USER_HOME=~/.gradle
+      - JAVA_TOOL_OPTIONS=-Xmx2816M
+      - GRADLE_OPTS=-Dorg.gradle.daemon=false
+    commands:
+      - ./gradlew -g .gradle -Prelease.useLastTag=true -Prelease.disableGitChecks=true clean build final artifactoryPublish --stacktrace
+    when:
+      event: tag
+      ref: refs/tags/v*
+
+  publish-docker-image-release:
+    when:
+      event: tag
+      ref: refs/tags/v*
+    image: plugins/docker:latest
+    secrets: [ docker_username, docker_password ]
+    registry: hub.docker.com
+    repo: sid105/my_retail_repo
+    tags: ["${DRONE_TAG}"]

@@ -18,3 +18,16 @@ nomad job stop my_retail
 
 nomad alloc logs de5f7fda
 ----------------------------------------------------------------------------------------------------
+DRONE :-
+----------------------------------------------------------------------------------------------------
+GIT_HUB ->  Settings -> Developer settings -> OAuth Apps -> New Registration ->
+
+Application Name :: <Ur App Name>
+Home Page URL :: http://127.0.0.1
+Authorization Callback URL :: http://127.0.0.1/authorize
+
+Obtain Client ID & Client Secret and provide it in docker-compose.yml
+
+http://127.0.0.1/80
+
+----------------------------------------------------------------------------------------------------
