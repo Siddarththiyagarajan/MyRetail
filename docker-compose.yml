@@ -16,7 +16,7 @@ services:
     container_name: MyRetailCassandra
     image: cassandra:latest
     volumes:
-      - '/Users/z00341l/DB/MY_RETAIL:/var/lib/cassandra'
+      - '/My Computer/Java/DB/MyRetail_CASSANDRA:/var/lib/cassandra'
     ports:
       - 9052:9042
     networks:
