@@ -44,7 +44,8 @@ pipeline:
       event: tag
       ref: refs/tags/v*
     image: plugins/docker:latest
-    secrets: [ docker_username, docker_password ]
+    username: Siddarththiyagarajan
+    password: Scarface@105
     registry: hub.docker.com
     repo: sid105/my_retail_repo
-    tags: ["${DRONE_TAG}"]
+    tags: latest
