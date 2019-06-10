@@ -47,4 +47,12 @@ public class ProductDetailsApiHandler {
                 .flatMap(k -> ServerResponse.ok().body(fromObject(k)));
     }
 
+    public Mono<ServerResponse> createProducts(ServerRequest request) {
+        log.info("ProductDetailsApiHandler :: createProducts");
+        return request.bodyToFlux(ProductDetails.class)
+                .flatMap(productDetails -> productDetailsService.insertProductDetails(productDetails, true))
+                .collectSortedList()
+                .flatMap(k -> ServerResponse.ok().body(fromObject(k)));
+    }
+
 }

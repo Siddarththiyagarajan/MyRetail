@@ -24,7 +24,8 @@ public class ProductDetailsApi {
     @Bean
     public RouterFunction<ServerResponse> composedRoutes() {
         return route(GET("/rest/products/{id}"), productDetailsApiHandler :: getProductDetails)
-                .andRoute(POST("/rest/products/{id}"), productDetailsApiHandler :: createProductDetails);
+                .andRoute(POST("/rest/products/{id}"), productDetailsApiHandler :: createProductDetails)
+                .andRoute(POST("/rest/createMultipleProducts"), productDetailsApiHandler :: createProducts);
     }
 
 }
