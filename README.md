@@ -43,4 +43,13 @@ Tech Stack :-
 2. Spring Data Cassandra Reactive
 3. Cassandra
 4. Docker 
+
+---------------------------------------------------------------------------------------------------------------------
+Spring Web Flux Guide
+-----------------------------------------------------------------------------------------------------------
+	1) https://github.com/spring-projects/spring-framework/blob/master/src/docs/asciidoc/web/webflux-functional.adoc
+	2) https://dzone.com/articles/creating-multiple-routerfunctions-in-spring-webflux
+	3) https://www.baeldung.com/spring-5-functional-web
+
+----------------------------------------------------------------------------------------------------------------------
         
