@@ -14,7 +14,7 @@ pipeline:
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx2400M
     commands:
-      - ./gradlew -g .gradle clean build --continue --no-daemon -PmaxParallelForks=1
+      - mvn clean install
 
   master-push-build:
     image: library/java:8
@@ -25,19 +25,7 @@ pipeline:
     environment:
       - JAVA_TOOL_OPTIONS=-Xmx2400M
     commands:
-      - ./gradlew -g .gradle clean build --continue --no-daemon -PmaxParallelForks=1
-
-  release-tag:
-    image: library/java:8
-    environment:
-      - GRADLE_USER_HOME=~/.gradle
-      - JAVA_TOOL_OPTIONS=-Xmx2816M
-      - GRADLE_OPTS=-Dorg.gradle.daemon=false
-    commands:
-      - ./gradlew -g .gradle -Prelease.useLastTag=true -Prelease.disableGitChecks=true clean build final artifactoryPublish --stacktrace
-    when:
-      event: tag
-      ref: refs/tags/v*
+      - mvn clean install
 
   publish-docker-image-release:
     when:
