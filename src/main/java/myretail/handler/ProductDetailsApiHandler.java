@@ -48,11 +48,10 @@ public class ProductDetailsApiHandler {
     }
 
     public Mono<ServerResponse> createProducts(ServerRequest request) {
-        log.info("ProductDetailsApiHandler :: createProducts");
-        return request.bodyToFlux(ProductDetails.class)
-                .flatMap(productDetails -> productDetailsService.insertProductDetails(productDetails, true))
-                .collectSortedList()
-                .flatMap(k -> ServerResponse.ok().body(fromObject(k)));
+        log.info("ProductDetailsApiHandler :: Using parallel calls for createProducts");
+	    return productDetailsService
+	    		.insertProductDetails(request.bodyToFlux(ProductDetails.class))
+	    		.collectList()
+	        .flatMap(k -> ServerResponse.ok().body(fromObject(k)));
     }
-
 }

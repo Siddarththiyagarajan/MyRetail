@@ -3,6 +3,7 @@ package myretail.service.impl;
 import lombok.extern.slf4j.Slf4j;
 import myretail.model.PriceDetails;
 import myretail.model.ProductDetails;
+import myretail.model.respose.InsertProductResponse;
 import myretail.repository.ProductReactiveRepository;
 import myretail.repository.ProductRepository;
 import myretail.service.ItemService;
@@ -10,7 +11,10 @@ import myretail.service.PriceService;
 import myretail.service.ProductDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +26,7 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
     private PriceService priceService;
     private ProductRepository productRepository;
     private ProductReactiveRepository productReactiveRepository;
-
+    
     @Autowired
     public ProductDetailsServiceImpl(ItemService itemService, PriceService priceService,
                                      ProductRepository productRepository,
@@ -56,13 +60,22 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
     }
 
     @Override
-    public Mono<String> insertProductDetails(ProductDetails productDetails, Boolean isReactive) {
-        log.info("ProductDetailsService :: insertProductDetails");
+    public Mono<InsertProductResponse> insertProductDetails(ProductDetails productDetails, Boolean isReactive) {
+        log.info("ProductDetailsService :: insertProductDetails -> Thread : " + Thread.currentThread().getId());
         return productReactiveRepository
                 .insert(productDetails.toProduct())
-                .flatMap(k -> Mono.just("Success"));
+                .map(k -> {
+                		return new InsertProductResponse(k.getProductId(), "Success"); 
+                });
     }
-
+    
+    @Override
+    public Flux<InsertProductResponse> insertProductDetails(Flux<ProductDetails> productDetailFlux) {
+    		return productDetailFlux
+    				.flatMap(productDetail -> insertProductDetails(productDetail, true))
+    				.subscribeOn(Schedulers.parallel());
+    }
+    
     @Override
     public Mono<ProductDetails> getProductDetailsFromDB(String productId, Boolean isReactive) {
         log.info("ProductDetailsService :: getProductDetailsFromDB");

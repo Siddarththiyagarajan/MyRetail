@@ -34,4 +34,15 @@ public class ItemServiceImpl implements ItemService {
 
         return Mono.just("ITEM_NAME");  //return Mono.just("ITEM_NOT_AVAILABLE");
     }
+    
+    // TO HIT ITEM SERVICE FOR MULTIPLE ITEMS
+    /*public Mono<String> insertProductDetails2(Flux<ProductDetails> productDetailFlux) {
+	    	productDetailFlux
+	    	  .flatMap(productDetail -> webClient.get().uri("/comments/{id}", productDetail)
+	    	    .retrieve()
+	    	    .bodyToMono(String.class))
+	    	  .subscribeOn(Schedulers.parallel());
+	
+		return null;
+    }*/
 }
