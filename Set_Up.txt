@@ -1,18 +1,27 @@
 ----------------------------------------------------------------------------------------------------
 NOMAD SETUP :- 
 ----------------------------------------------------------------------------------------------------
-Download Vagrant File from
+1)  Download Vagrant File from
 	https://raw.githubusercontent.com/hashicorp/nomad/master/demo/vagrant/Vagrantfile
-	
-vagrant up
-vagrant ssh
-sudo nomad agent -dev
+	    (or)
+    Download actual binaries from
+    https://www.nomadproject.io/downloads.html
+
+2)  Required only when done through Vagrant
+    vagrant up
+    vagrant ssh
+
+3)  sudo nomad agent -dev
 
 nomad node status
 nomad server members
 
 Copy the my_retail.nomad here
-nomad job run my_retail.nomad
+
+4)  nomad job run my_retail.nomad
+
+5) NOTE :- Docker login should be done before all this
+
 nomad status my_retail
 nomad job stop my_retail
 
@@ -29,5 +38,9 @@ Authorization Callback URL :: http://127.0.0.1/authorize
 Obtain Client ID & Client Secret and provide it in docker-compose.yml
 
 http://127.0.0.1/80
+
+To run drone on local, git needs to communicate to drone running in local machine
+Hence reverse proxy need to be set up, if it a private IP
+Install Ngrok, get the IP and provide it
 
 ----------------------------------------------------------------------------------------------------
