@@ -7,14 +7,16 @@ job "my_retail" {
 		task "my_retail_task" {
 			driver = "docker"
 			config {
-				image = "sid105/my_retail_repo:latest"
+				image = "siddarththiyagarajan/my_retail_app:latest"
 				network_mode = "host"
+
+				auth {
+					username = "siddarththiyagarajan"
+					password = "scarface105"
+				}
 				
 				entrypoint = [
 					"java",
-					"-Xms1025m",
-					"-Xmx1025m",
-					"-Djava.security.egd=file:/dev/./urandom",
 					"-jar",
 					"/myRetail.jar"
 				]
