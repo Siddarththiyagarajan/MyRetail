@@ -2,7 +2,7 @@ job "my_retail" {
 	datacenters = ["dc1"]
 	type = "service"
 	group "api" {
-		count = 1
+		count = 3
 		
 		task "my_retail_task" {
 			driver = "docker"
@@ -13,6 +13,9 @@ job "my_retail" {
 				    username = "siddarththiyagarajan"
 				    password = "scarface105"
 				}
+				port_map {
+                      http = 8080
+                }
 
 				entrypoint = [
 					"java",
