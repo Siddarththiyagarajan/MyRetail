@@ -8,13 +8,12 @@ job "my_retail" {
 			driver = "docker"
 			config {
 				image = "siddarththiyagarajan/my_retail_app:latest"
-				network_mode = "host"
 
 				auth {
-					username = "siddarththiyagarajan"
-					password = "scarface105"
+				    username = "siddarththiyagarajan"
+				    password = "scarface105"
 				}
-				
+
 				entrypoint = [
 					"java",
 					"-jar",

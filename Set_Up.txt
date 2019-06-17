@@ -13,19 +13,22 @@ NOMAD SETUP :-
 
 3)  sudo nomad agent -dev
 
-nomad node status
-nomad server members
+    nomad node status
+    nomad server members
 
-Copy the my_retail.nomad here
+    Copy the my_retail.nomad here
 
 4)  nomad job run my_retail.nomad
 
-5) NOTE :- Docker login should be done before all this
+5)  NOTE :- Docker login should be done before all this
 
-nomad status my_retail
-nomad job stop my_retail
+    nomad status my_retail
+    nomad job stop my_retail
 
-nomad alloc logs de5f7fda
+    nomad alloc logs de5f7fda
+
+6)  NOMAD UI :  http://localhost:4646/ui
+
 ----------------------------------------------------------------------------------------------------
 DRONE :-
 ----------------------------------------------------------------------------------------------------
