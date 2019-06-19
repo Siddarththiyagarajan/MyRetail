@@ -1,0 +1,27 @@
+    @SpringBootApplication
+        @EnableAutoConfiguration
+        @ComponentScan
+        @Configuration
+
+    SpringApplication.run
+		1. Create an appropriate ApplicationContext instance (depending on your classpath)
+		2. Register a CommandLinePropertySource to expose command line arguments as Spring properties
+		3. Refresh the application context, loading all singleton beans
+		4. Trigger any CommandLineRunner beans
+
+	SpringApplication.addListener
+	    To add Listeners
+
+	Spring uses reactive framework provided by Webflux, when webflux defined in the POM as dependency.
+	But, when any of the jars or class files from Spring-Mvc is used, then Spring defaults to Spring-MVC rather than making the application reactive.
+	To force the application to reactive, when both Spring-MVC and Spring-Webflux is there, use...
+
+		SpringApplication app = new SpringApplication(MyRetailApplication.class);
+		app.setWebApplicationType(WebApplicationType.REACTIVE);
+		app.run(args);
+
+    Filters on Routes
+
+	Reference :-
+
+	    https://docs.spring.io/spring/docs/current/spring-framework-reference/web-reactive.html
