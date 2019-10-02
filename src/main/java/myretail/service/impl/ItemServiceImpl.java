@@ -1,6 +1,7 @@
 package myretail.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import myretail.config.PropertyConfig;
 import myretail.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,10 +14,12 @@ import reactor.core.scheduler.Schedulers;
 public class ItemServiceImpl implements ItemService {
 
     private WebClient webClient;
+    private PropertyConfig propertyConfig;
 
     @Autowired
-    public ItemServiceImpl(WebClient webClient) {
+    public ItemServiceImpl(WebClient webClient, PropertyConfig propertyConfig) {
         this.webClient = webClient;
+        this.propertyConfig = propertyConfig;
     }
 
     @Override
@@ -30,7 +33,7 @@ public class ItemServiceImpl implements ItemService {
             e.printStackTrace();
         }
 
-        return webClient.get().uri("http://www.mocky.io/v2/5d0a43142f00006700e3eae9"
+        return webClient.get().uri(propertyConfig.getItemUrl()
                 .concat("/rest/item/itemDetails"), productId)
                 .exchange()
                 .flatMap(itemResponse -> itemResponse.bodyToMono(String.class))

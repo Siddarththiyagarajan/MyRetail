@@ -1,6 +1,7 @@
 package myretail.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import myretail.config.PropertyConfig;
 import myretail.model.CurrencyCode;
 import myretail.model.PriceDetails;
 import myretail.model.PriceMsg;
@@ -18,10 +19,12 @@ import reactor.core.scheduler.Schedulers;
 public class PriceServiceImpl implements PriceService {
 
     private WebClient webClient;
+    private PropertyConfig propertyConfig;
 
     @Autowired
-    public PriceServiceImpl(WebClient webClient) {
+    public PriceServiceImpl(WebClient webClient, PropertyConfig propertyConfig) {
         this.webClient = webClient;
+        this.propertyConfig = propertyConfig;
     }
 
     @Override
@@ -35,7 +38,7 @@ public class PriceServiceImpl implements PriceService {
             e.printStackTrace();
         }
 
-        return webClient.get().uri("http://www.mocky.io/v2/5d0a44d22f00004d00e3eaf1")
+        return webClient.get().uri(propertyConfig.getPriceUrl())
                 //.concat("/rest/price/priceDetails"), productId)
                 .exchange()
                 .flatMap(priceResponse -> priceResponse.bodyToMono(PriceDetails.class))

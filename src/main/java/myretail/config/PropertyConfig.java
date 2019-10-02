@@ -14,4 +14,6 @@ import org.springframework.context.annotation.PropertySource;
 public class PropertyConfig {
 
     private String cassandraHostIP;
+    private String priceUrl;
+    private String itemUrl;
 }

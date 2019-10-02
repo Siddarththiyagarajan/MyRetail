@@ -39,10 +39,15 @@ public class ProductDetailsServiceImpl implements ProductDetailsService {
 
     @Override
     public Mono<ProductDetails> getProductDetails(String productId) {
-        log.info("ProductDetailsService :: getProductDetails");
-        return itemService.getItemDetails(productId)
+        log.info("Before parallel call :: " + Thread.currentThread().getName());
+        return Mono.zip(itemService.getItemDetails(productId), priceService.getPriceDetails(productId),
+                (itemDetails, priceDetails) -> {
+                    log.info("After parallel call :: " + Thread.currentThread().getName());
+                    return mapResponse(itemDetails, priceDetails, productId);
+                });
+        /*return itemService.getItemDetails(productId)
                 .zipWith(priceService.getPriceDetails(productId))
-                .map(k -> mapResponse(k.getT1(), k.getT2(), productId));
+                .map(k -> mapResponse(k.getT1(), k.getT2(), productId));*/
     }
 
     @Override

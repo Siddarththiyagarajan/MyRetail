@@ -35,9 +35,32 @@ Installation :-
                 "value": 300.67,
                 "currency_code": "USD"
             }
-        }                     
-        
+        }
+
+9. After making any code
+    1. Build the project using : mvn clean install
+   	2. Create a docker image using : docker-compose up —build
+   	3. Upload the image to the docker repo using the commands above 
+   	4. Run the NOMAD file, which will pull the latest image from the docker repo and will spin up the 	      instances
+   
+   
+   DOCKER COMMANDS :-
+    docker images
+   	docker  rmi -f <image_id>
+   	docker ps
+   	docker ps -a
+    Push a locally created image to the docker repo
+   		docker tag myretailapp siddarththiyagarajan/my_retail_app
+   		docker push siddarththiyagarajan/my_retail_app
+   	
+   	DOCKER_HUB URL :: https://hub.docker.com
+   	USER
+   	PASS                              
+
+
+---------------------------------------------------------------------------------------------------------------------        
 Tech Stack :-
+---------------------------------------------------------------------------------------------------------------------
 
 1. Spring Webflux
 2. Spring Data Cassandra Reactive
@@ -52,4 +75,21 @@ Spring Web Flux Guide
 	3) https://www.baeldung.com/spring-5-functional-web
 
 ----------------------------------------------------------------------------------------------------------------------
+NOMAD COMMANDS
+----------------------------------------------------------------------------------------------------------------------
+        Start the Client and Server in DEV mode 
         
+        	sudo nomad agent -devzz
+        
+        
+        NOMAD UI 
+        
+        	http://localhost:4646/ui/jobs
+        
+        
+        Start the JOB:
+        
+        	nomad job run my_retail.nomad
+        	-> Pulls the image from the docker repository and spins up the specified number of instances
+        	
+----------------------------------------------------------------------------------------------------------------------
