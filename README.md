@@ -93,3 +93,34 @@ NOMAD COMMANDS
         	-> Pulls the image from the docker repository and spins up the specified number of instances
         	
 ----------------------------------------------------------------------------------------------------------------------
+KUBERNETES COMMANDS
+----------------------------------------------------------------------------------------------------------------------
+
+        Get the Nodes
+            kubectl get nodes
+        
+        Get the Pod
+            kubectl get pods
+        
+        Create a Deployment
+            kubectl create -f deploy.yml
+        
+        Delete a Deployment
+            kubectl delete -f deploy.yml
+        
+        Get the status of Service
+            kubectl get svc
+
+----------------------------------------------------------------------------------------------------------------------
+
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml
+
+kubectl proxy
+
+To get Bearer token
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+
+
+https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
+
