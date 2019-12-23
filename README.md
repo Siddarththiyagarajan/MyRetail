@@ -66,6 +66,7 @@ Tech Stack :-
 2. Spring Data Cassandra Reactive
 3. Cassandra
 4. Docker 
+5. Kubernetes
 
 ---------------------------------------------------------------------------------------------------------------------
 Spring Web Flux Guide
@@ -112,15 +113,22 @@ KUBERNETES COMMANDS
             kubectl get svc
 
 ----------------------------------------------------------------------------------------------------------------------
+KUBERNETES UTILS
+----------------------------------------------------------------------------------------------------------------------
 
 
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0-beta8/aio/deploy/recommended.yaml
 
 kubectl proxy
 
-To get Bearer token
+To get Bearer token:
+
 kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
 
+Dashboard URL :
 
+http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/.
+
+REFERENCE
 https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
 
