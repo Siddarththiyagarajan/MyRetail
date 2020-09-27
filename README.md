@@ -1,31 +1,25 @@
 
-LOCAL Installation :-
+LOCAL SetUp :-
 ----------------------------------------------------------------------------------------------------------------------
-
-1. Cassandra script that needs to be run
-
-    -> CREATE KEYSPACE IF NOT EXISTS myretail_keyspace WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy', 'datacenter1' : 3 };
-    -> CREATE TABLE IF NOT EXISTS myretail_keyspace.products (product_id int PRIMARY KEY, product_name varchar, price_value decimal, price_currency_code varchar);
-
-2. After downloading the project from GIT, please change cassandraHostIP in the property file to your machines network ip
-3. Network ip can be obtained from the network preferences of the machine.
+1. Pull cassandra docker image and run the container in port 9042
+2. Run the cassandra.sh /scripts directory. This will create the necessary keyspace and tables in locally running cassandra
+3. Get the Network IP of the machine from network preferences
 4. Build
 
+    Maven build
+      
             mvn clean install -DcassandraHostIP=192.xxx.x.xxx
-5. Change the volumes of MyRetailCassandra to your local folder in **docker-compose.yml**
-6. docker-compose up --build
- 
-            -> Creates a docker image of MyRetail app            
-            -> Downloads the cassandra image, creates a container
-            -> Runs the cassandra start up script to create initial keyspace and tables
-            -> spawns an instance of myretailapp and connects to the cassandra container
+
+    Docker image build
+   	
+            docker-compose up            
             
-7. Health check
+5. Health check
 
             http://<<ur_network_ip>>:8080/actuator/health
             Eg: http://192.168.104.225:8080/actuator/health
 
-8. API
+6. API
 
         GET -> http://<<ur_network_ip>>:8080/rest/products/{id}
         GET -> http://<<ur_network_ip>>:8080/rest/products/{id}?fromDb=true
@@ -40,47 +34,59 @@ LOCAL Installation :-
                 "currency_code": "USD"
             }
         }
-
-9. After making any code
-     
-        Build the project using 
-
-               mvn clean install
-        
-   	  Create a docker image using
-   	
-               docker-compose up —build
-               
-   	   Upload the image to the docker repo using the commands above
-   	 
-   	   Run the NOMAD file / K8, which will pull the latest image from the docker repo and will spin up the instances
   
-10. DOCKER COMMANDS :-
+7. DOCKER REPOS:-
+        
+        hub.docker.com/siddarththiyagarajan/my_retail_app
+        hub.docker.com/sid105/cassandra
+        
+        hub.docker.com/sid105/my_retail_repo
+
+    Push a locally created image to the docker repo
+   		
+   		docker tag myretailapp siddarththiyagarajan/my_retail_app
+   		docker push siddarththiyagarajan/my_retail_app        
+
+    USEFUL DOCKER COMMANDS :-
 
         docker images
         docker  rmi -f <image_id>
         docker ps
         docker ps -a
         
-    Push a locally created image to the docker repo
-   		
-   		docker tag myretailapp siddarththiyagarajan/my_retail_app
-   		docker push siddarththiyagarajan/my_retail_app
-   	
-   	DOCKER_HUB URL :: https://hub.docker.com
-   	USER
-   	PASS                              
+   	DOCKER_HUB URL :-
+   	    https://hub.docker.com
 
+8. Depricated Files and Process that is not used <br/>
+  File :: docker-compose_2.yaml <br/>
+  Change the volumes of MyRetailCassandra to your local folder in **docker-compose.yml** <br/>
+  docker-compose up --build <br/>
 
+            -> Creates a docker image of MyRetail app            
+            -> Downloads the cassandra image, creates a container
+            -> Runs the cassandra start up script to create initial keyspace and tables
+            -> spawns an instance of myretailapp and connects to the cassandra container   	                              
 ----------------------------------------------------------------------------------------------------------------------
-SETTING UP THE APP IN KUBERNETES CLUSTER
+KUBERNETES DEPLOYMENT
 ----------------------------------------------------------------------------------------------------------------------
 1. First setup the Cassandra cluster in your Kubernetes and run the startupscript. Refer to ReadMe.md in k8 directory.
-2. Deploy the application
+2. Get the cassandra cluster ip
+
+            kubectl get svc -n my-retail-stage
+            
+            NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+            cassandra          ClusterIP   10.108.222.254   <none>        9042/TCP            42h
+            cassandra-peers    ClusterIP   None             <none>        7000/TCP,7001/TCP   42h
+
+    Cassandra Cluster Ip :: 10.108.222.254
+
+3. In the deploy.yaml file, change the 'cassandraHostIP' parameter in the APP_ARGS to the cluster-ip of the cassandra.
+    In our case it is 10.108.222.254. This will make sure that our application will connect to the cassandra cluster
+4. Deploy the application
 
             kubectl create -f deploy.yml
 
-3. Access the application using the Nodeport
+5. Access the application using the Nodeport
  
             kubectl get svc -n my-retail-stage
             
@@ -92,8 +98,6 @@ SETTING UP THE APP IN KUBERNETES CLUSTER
     The service(myretail-service) is hosted as NodePort and can be accessed using the port 31907 like
     
             curl http://localhost:31907/actuator/health
-                 
-    
 
 ---------------------------------------------------------------------------------------------------------------------        
 Tech Stack :-

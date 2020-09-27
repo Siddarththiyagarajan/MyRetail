@@ -26,7 +26,7 @@ spec:
           image: myretailapp:latest
           env:
             - name: APP_ARGS
-              value: ' -Dserver.port=8080 -jar /myRetail.jar --cassandraHostIP=10.1.0.139'
+              value: '-jar /myRetail.jar -DcassandraHostIP=10.108.222.254'
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
