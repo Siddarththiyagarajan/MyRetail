@@ -9,7 +9,9 @@ LOCAL Installation :-
 
 2. After downloading the project from GIT, please change cassandraHostIP in the property file to your machines network ip
 3. Network ip can be obtained from the network preferences of the machine.
-4. mvn clean install
+4. Build
+
+            mvn clean install -DcassandraHostIP=192.xxx.x.xxx
 5. Change the volumes of MyRetailCassandra to your local folder in **docker-compose.yml**
 6. docker-compose up --build
  
