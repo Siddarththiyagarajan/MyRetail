@@ -7,61 +7,8 @@ services:
         replicas: 5
     ports:
       - 8080:8080
-    depends_on:
-      - cassandra-load-keyspace
     networks:
       - myretailnetwork
-
-  MyRetailCassandra:
-    container_name: MyRetailCassandra
-    image: cassandra:latest
-    volumes:
-      - '/My Computer/Java/DB/MyRetail_CASSANDRA:/var/lib/cassandra'
-    ports:
-      - 9052:9042
-    networks:
-      - myretailnetwork
-      
-  cassandra-load-keyspace:
-    container_name: cassandra-load-keyspace
-    image: cassandra:latest
-    depends_on:
-      - MyRetailCassandra
-    volumes:
-      - $PWD/scripts/schema.cql:/schema.cql 
-    command: /bin/bash -c "sleep 60 && echo loading cassandra keyspace && cqlsh MyRetailCassandra -f /schema.cql"
-
-  drone-server:
-    image: drone/drone:0.8
-    ports:
-      - 80:8000
-      - 9000
-    volumes:
-      - drone-server-data:/var/lib/drone/
-    restart: always
-    environment:
-      - DRONE_OPEN=true
-      - DRONE_HOST=http://192.168.0.156
-      - DRONE_GITHUB=true
-      - DRONE_GITHUB_CLIENT=2684a813c0f21b3b873e
-      - DRONE_GITHUB_SECRET=0e5c298e8987cd1cb413da89e0361c11b2de27a0
-      - DRONE_SECRET=DRONE_SECRET
-      - DRONE_ADMIN=Siddarththiyagarajan
-
-  drone-agent:
-    image: drone/agent:0.8
-    command: agent
-    restart: always
-    depends_on:
-      - drone-server
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - DRONE_SERVER=drone-server:9000
-      - DRONE_SECRET=DRONE_SECRET
-
-volumes:
-  drone-server-data:
 
 networks:
     myretailnetwork:

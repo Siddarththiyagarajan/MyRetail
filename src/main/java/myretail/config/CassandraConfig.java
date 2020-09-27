@@ -30,7 +30,7 @@ public class CassandraConfig {
     public CassandraClusterFactoryBean cluster() {
         CassandraClusterFactoryBean cluster = new CassandraClusterFactoryBean();
         cluster.setContactPoints(propertyConfig.getCassandraHostIP());
-        cluster.setPort(9052);
+        cluster.setPort(9042);
         cluster.setJmxReportingEnabled(false);
         return cluster;
     }

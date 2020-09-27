@@ -2,10 +2,16 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: myretail-deployment
+  namespace: my-retail-stage
   labels:
     app: myretailapp
 spec:
   replicas: 3
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
   selector:
     matchLabels:
       app: myretailapp
@@ -18,18 +24,23 @@ spec:
       containers:
         - name: myretailapp
           image: myretailapp:latest
+          env:
+            - name: APP_ARGS
+              value: ' -Dserver.port=8080 -jar /myRetail.jar --cassandraHostIP=10.1.0.139'
           imagePullPolicy: Never
           ports:
             - containerPort: 8080
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
   name: myretail-service
+  namespace: my-retail-stage
+  labels:
+    app: myretailapp
 spec:
   selector:
     app: myretailapp
+  type: NodePort    #LoadBalancer, ClusterIP
   ports:
     - port: 8080
-  type: NodePort    #LoadBalancer
