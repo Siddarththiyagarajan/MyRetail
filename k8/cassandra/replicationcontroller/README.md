@@ -92,7 +92,7 @@ env:
 ```
 
 ## Reference
-https://learning.oreilly.com/library/view/mastering-kubernetes/9781786461001/ch08s03.html
+https://learning.oreilly.com/library/view/mastering-kubernetes/9781786461001/ch08s03.html </br>
 https://github.com/vyshane/cassandra-kubernetes/
 
 ## Alternatives?
