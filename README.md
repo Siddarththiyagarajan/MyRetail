@@ -7,13 +7,13 @@ LOCAL SetUp :-
 4. Build
 
     Maven build
-      
+
             mvn clean install -DcassandraHostIP=192.xxx.x.xxx
 
     Docker image build
-   	
+
             docker-compose up            
-            
+
 5. Health check
 
             http://<<ur_network_ip>>:8080/actuator/health
@@ -24,7 +24,7 @@ LOCAL SetUp :-
         GET -> http://<<ur_network_ip>>:8080/rest/products/{id}
         GET -> http://<<ur_network_ip>>:8080/rest/products/{id}?fromDb=true
         POST -> http://<<ur_network_ip>>:8080/rest/products/{id}
-        
+
         Sample Request Body :-        
         {
             "id": 2134255,
@@ -34,16 +34,16 @@ LOCAL SetUp :-
                 "currency_code": "USD"
             }
         }
-  
+
 7. DOCKER REPOS:-
-        
+
         hub.docker.com/siddarththiyagarajan/my_retail_app
         hub.docker.com/sid105/cassandra
-        
+
         hub.docker.com/sid105/my_retail_repo
 
     Push a locally created image to the docker repo
-   		
+
    		docker tag myretailapp siddarththiyagarajan/my_retail_app
    		docker push siddarththiyagarajan/my_retail_app        
 
@@ -53,7 +53,7 @@ LOCAL SetUp :-
         docker  rmi -f <image_id>
         docker ps
         docker ps -a
-        
+
    	DOCKER_HUB URL :-
    	    https://hub.docker.com
 
@@ -73,30 +73,32 @@ KUBERNETES DEPLOYMENT
 2. Get the cassandra cluster ip
 
             kubectl get svc -n my-retail-stage
-            
+
             NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
             cassandra          ClusterIP   10.108.222.254   <none>        9042/TCP            42h
             cassandra-peers    ClusterIP   None             <none>        7000/TCP,7001/TCP   42h
 
     Cassandra Cluster Ip :: 10.108.222.254
 
-3. In the deploy.yaml file, change the 'cassandraHostIP' parameter in the APP_ARGS to the cluster-ip of the cassandra.
+3. In the application-dev.properties, change the 'cassandraHostIP' parameter to the cluster-ip of the cassandra.
+     (OR)
+    In the deploy.yaml file, change the 'cassandraHostIP' parameter in the APP_ARGS to the cluster-ip of the cassandra.
     In our case it is 10.108.222.254. This will make sure that our application will connect to the cassandra cluster
 4. Deploy the application
 
             kubectl create -f deploy.yml
 
 5. Access the application using the Nodeport
- 
+
             kubectl get svc -n my-retail-stage
-            
+
             NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
             cassandra          ClusterIP   10.108.222.254   <none>        9042/TCP            42h
             cassandra-peers    ClusterIP   None             <none>        7000/TCP,7001/TCP   42h
             myretail-service   NodePort    10.105.243.41    <none>        8080:31907/TCP      40h
 
     The service(myretail-service) is hosted as NodePort and can be accessed using the port 31907 like
-    
+
             curl http://localhost:31907/actuator/health
 
 ---------------------------------------------------------------------------------------------------------------------        
@@ -106,7 +108,7 @@ Tech Stack :-
 1. Spring Webflux
 2. Spring Data Cassandra Reactive
 3. Cassandra
-4. Docker 
+4. Docker
 5. Kubernetes
 
 ---------------------------------------------------------------------------------------------------------------------
@@ -118,37 +120,37 @@ Spring Web Flux Guide
 ----------------------------------------------------------------------------------------------------------------------
 NOMAD COMMANDS
 ----------------------------------------------------------------------------------------------------------------------
-        Start the Client and Server in DEV mode 
-        
+        Start the Client and Server in DEV mode
+
         	sudo nomad agent -devzz
-        
-        
-        NOMAD UI 
-        
+
+
+        NOMAD UI
+
         	http://localhost:4646/ui/jobs
-        
-        
+
+
         Start the JOB:
-        
+
         	nomad job run my_retail.nomad
         	-> Pulls the image from the docker repository and spins up the specified number of instances
-        	
+
 ----------------------------------------------------------------------------------------------------------------------
 KUBERNETES COMMANDS
 ----------------------------------------------------------------------------------------------------------------------        
 
         Get the Nodes
             kubectl get nodes
-        
+
         Get the Pod
             kubectl get pods
-        
+
         Create a Deployment
             kubectl create -f deploy.yml
-        
+
         Delete a Deployment
             kubectl delete -f deploy.yml
-        
+
         Get the status of Service
             kubectl get svc
 
@@ -171,4 +173,3 @@ Dashboard URL :
 
 REFERENCE
         https://kubernetes.io/docs/tasks/access-application-cluster/web-ui-dashboard/
-
