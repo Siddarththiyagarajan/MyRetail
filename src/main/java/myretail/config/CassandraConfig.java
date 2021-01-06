@@ -1,5 +1,6 @@
 package myretail.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +16,7 @@ import org.springframework.data.cassandra.core.mapping.BasicCassandraMappingCont
 import org.springframework.data.cassandra.core.mapping.CassandraMappingContext;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
+@Slf4j
 @Configuration
 @EnableCassandraRepositories(basePackages = {"myretail.repository.impl"})
 public class CassandraConfig {
@@ -29,6 +31,7 @@ public class CassandraConfig {
     @Bean
     public CassandraClusterFactoryBean cluster() {
         CassandraClusterFactoryBean cluster = new CassandraClusterFactoryBean();
+        log.info("Cassandra Host IP :: {}", propertyConfig.getCassandraHostIP());
         cluster.setContactPoints(propertyConfig.getCassandraHostIP());
         cluster.setPort(9042);
         cluster.setJmxReportingEnabled(false);
